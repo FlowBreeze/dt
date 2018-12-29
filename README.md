@@ -12,6 +12,14 @@
 >使用 javafx 进行查词结果显示  
 >使用 owner 读取配置信息
 
+## 发布版 0.1.0
+点击[这里下载](https://github.com/FlowBreeze/dt/releases)  
+需要在 java 1.8 以上环境运行  
+> java -jar dt-0.1.0.jar
+如果出现 java.lang.NoClassDefFoundError: javafx/application/Application  
+请尝试安装 openjfx  
+>sudo apt install openjfx
+
 ## 不足
 >只支持英译汉  
 >界面样式不完善  
