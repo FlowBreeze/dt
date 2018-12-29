@@ -3,9 +3,10 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.lfkj</groupId>
     <artifactId>dt</artifactId>
-    <version>0.0.1</version>
+    <version>0.1.0</version>
     <dependencies>
         <dependency>
+            <!-- used to listen mouse click event -->
             <groupId>com.1stleg</groupId>
             <artifactId>jnativehook</artifactId>
             <version>2.1.0</version>
@@ -24,6 +25,24 @@
             <groupId>com.squareup.retrofit2</groupId>
             <artifactId>converter-gson</artifactId>
             <version>2.5.0</version>
+        </dependency>
+
+        <!-- used to load and save custom configurations -->
+        <dependency>
+            <groupId>org.aeonbits.owner</groupId>
+            <artifactId>owner</artifactId>
+            <version>1.0.10</version>
+        </dependency>
+        <dependency>
+            <!-- enable default function in interface -->
+            <groupId>org.aeonbits.owner</groupId>
+            <artifactId>owner-java8</artifactId>
+            <version>1.0.10</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+            <version>2.0.1</version>
         </dependency>
 
     </dependencies>

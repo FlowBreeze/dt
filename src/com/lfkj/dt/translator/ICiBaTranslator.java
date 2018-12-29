@@ -1,5 +1,6 @@
-package com.lfkj.dt;
+package com.lfkj.dt.translator;
 
+import com.lfkj.dt.request.ICiBaHttp;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -93,6 +94,11 @@ public class ICiBaTranslator implements Translator {
                 meanings.setText("message:\n" + throwable.getMessage() + "\n for more details please check console");
             }
         });
+    }
+
+    @Override
+    public String getTittle() {
+        return "爱词霸";
     }
 
     public void readEnglish() {

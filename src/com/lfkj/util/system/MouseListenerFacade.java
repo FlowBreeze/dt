@@ -1,5 +1,7 @@
 package com.lfkj.util.system;
 
+import org.jnativehook.GlobalScreen;
+import org.jnativehook.NativeHookException;
 import org.jnativehook.mouse.NativeMouseEvent;
 import org.jnativehook.mouse.NativeMouseListener;
 
@@ -41,5 +43,10 @@ public class MouseListenerFacade implements NativeMouseListener {
     public void nativeMouseReleased(NativeMouseEvent nativeEvent) {
         if (nonNull(released))
             released.accept(nativeEvent);
+    }
+
+    public void addToGlobalScreen() throws NativeHookException {
+        GlobalScreen.registerNativeHook();
+        GlobalScreen.addNativeMouseListener(this);
     }
 }

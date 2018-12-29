@@ -1,6 +1,6 @@
-package com.lfkj.dt;
+package com.lfkj.dt.request;
 
-import okhttp3.ResponseBody;
+import com.google.gson.annotations.SerializedName;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -8,15 +8,20 @@ import retrofit2.http.Query;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+
+import static com.lfkj.dt.Constant.CONF;
 
 public interface BaiduHttp {
 
     String HOST_NAME = "http://api.fanyi.baidu.com/";
-    long APPID = 20181216000249121L;
-    String PRIVATE_KEY = "i7roLjgbkCP3O4fq9OEr";
+    long APPID = CONF.baiduAppId();
+//
+    String PRIVATE_KEY = CONF.baiduPrivateKey();
+//        "";
 
     @GET("api/trans/vip/translate")
-    Call<ResponseBody> translateAPI(
+    Call<Translation> translateAPI(
             @Query("from") String from,
             @Query("to") String to,
             @Query("q") String q,
@@ -24,6 +29,37 @@ public interface BaiduHttp {
             @Query("appid") long appid,
             @Query("sign") String md5);
 
+    class Translation {
+        @SerializedName("trans_result")
+        public Result[] result;
+
+        @Override
+        public String toString() {
+            return "Translation{" +
+                    "result=" + Arrays.toString(result) +
+                    '}';
+        }
+
+        public class Result {
+            @SerializedName("dst")
+            public String meanings;
+
+            @Override
+            public String toString() {
+                return "Result{" +
+                        "meanings='" + meanings + '\'' +
+                        '}';
+            }
+        }
+    }
+
+    static String mkMd5(String q, double rand) {
+        return mkMd5(APPID, q, rand, PRIVATE_KEY);
+    }
+
+    static String mkMd5(long appid, String q, double rand, String privateKey) {
+        return getMD5Str(appid + q + rand + privateKey);
+    }
 
     static String getMD5Str(String str) {
         MessageDigest messageDigest = null;

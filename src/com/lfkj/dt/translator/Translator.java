@@ -1,4 +1,4 @@
-package com.lfkj.dt;
+package com.lfkj.dt.translator;
 
 import com.google.gson.*;
 import okhttp3.OkHttpClient;
@@ -14,6 +14,8 @@ import static java.util.Objects.isNull;
 public interface Translator {
 
     void translate(String wordOrParagraph);
+
+    String getTittle();
 
     OkHttpClient client = new OkHttpClient.Builder()
             .connectTimeout(5, TimeUnit.SECONDS)

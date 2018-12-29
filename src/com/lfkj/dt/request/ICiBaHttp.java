@@ -1,4 +1,4 @@
-package com.lfkj.dt;
+package com.lfkj.dt.request;
 
 import com.google.gson.annotations.SerializedName;
 import retrofit2.Call;
@@ -8,9 +8,11 @@ import retrofit2.http.Query;
 import java.net.URL;
 import java.util.Arrays;
 
+import static com.lfkj.dt.Constant.CONF;
+
 public interface ICiBaHttp {
     String HOST_NAME = "http://dict-co.iciba.com/";
-    String KEY = "3B8BEC6E03BE66DAB129AFFBC6C57380";
+    String KEY = CONF.iCiBaKey();
 
     @POST("api/dictionary.php")
     Call<Translation> translateAPI(
@@ -21,6 +23,7 @@ public interface ICiBaHttp {
 
     class Translation {
         @SerializedName("symbols")
+        public
         Nature[] nature;
 
         @Override
@@ -32,20 +35,27 @@ public interface ICiBaHttp {
 
         public class Nature {
             @SerializedName("ph_en")
+            public
             String enSymbols;
             @SerializedName("ph_am")
+            public
             String amSymbols;
             @SerializedName("ph_en_mp3")
+            public
             URL enPronunciation;
             @SerializedName("ph_am_mp3")
+            public
             URL amPronunciation;
             @SerializedName("parts")
+            public
             Meaning[] meanings;
 
             public class Meaning {
                 @SerializedName("part")
+                public
                 String type; // vi. vt. n.
                 @SerializedName("means")
+                public
                 String[] meanings;
 
                 @Override
