@@ -9,7 +9,7 @@
 >使用 JNativeHook 库监听鼠标点击事件  
 >使用 java.awt SystemSelection 获取选择文本  
 >使用 retrofit2 进行 http 通讯  
->使用 javafx 进行查词结果显示
+>使用 javafx 进行查词结果显示  
 >使用 owner 读取配置信息
 
 ## 不足
