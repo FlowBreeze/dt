@@ -9,7 +9,11 @@ import java.util.function.Consumer;
 
 import static java.util.Objects.nonNull;
 
-public class MouseListenerFacade implements NativeMouseListener {
+/**
+ * 外观模式，封装了 {@link NativeMouseListener} 的调用和注册
+ * 使使用 lambda 表达式变为可能
+ */
+public class MouseListenerFacade implements NativeMouseListener, JNativeHookFacade {
     private Consumer<NativeMouseEvent> pressed;
     private Consumer<NativeMouseEvent> released;
 
@@ -45,8 +49,14 @@ public class MouseListenerFacade implements NativeMouseListener {
             released.accept(nativeEvent);
     }
 
+    @Override
     public void addToGlobalScreen() throws NativeHookException {
         GlobalScreen.registerNativeHook();
         GlobalScreen.addNativeMouseListener(this);
+    }
+
+    @Override
+    public void removeFromGlobalScreen() {
+        GlobalScreen.removeNativeMouseListener(this);
     }
 }

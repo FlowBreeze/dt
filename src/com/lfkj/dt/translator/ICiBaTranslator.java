@@ -1,15 +1,17 @@
 package com.lfkj.dt.translator;
 
 import com.lfkj.dt.request.ICiBaHttp;
+import com.lfkj.dt.request.Request;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.media.AudioClip;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
-import java.applet.Applet;
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.Function;
@@ -19,6 +21,9 @@ import java.util.regex.Pattern;
 
 import static java.util.Objects.isNull;
 
+/**
+ * 通过 {@link retrofit2.Retrofit} 与爱词霸 API 交互，返回结果到 javafx 中
+ */
 public class ICiBaTranslator implements Translator {
     @FXML
     private TextField word;
@@ -28,23 +33,19 @@ public class ICiBaTranslator implements Translator {
     private TextField amSymbols;
     @FXML
     private TextArea meanings;
+    @FXML
+    private Button enButton;
+    @FXML
+    private Button amButton;
+
+    private AudioClip englishVoice;
+    private AudioClip americanVoice;
 
 
     private static final String right = " ]";
     private static final String left = "[ ";
 
-    private ICiBaHttp iCiBa;
     private ICiBaHttp.Translation translation;
-
-    @FXML
-    public void initialize() {
-        iCiBa = new Retrofit.Builder()
-                .baseUrl(ICiBaHttp.HOST_NAME)
-                .addConverterFactory(factory)
-                .client(client)
-                .build()
-                .create(ICiBaHttp.class);
-    }
 
     @Override
     public void translate(String wordOrParagraph) {
@@ -58,10 +59,10 @@ public class ICiBaTranslator implements Translator {
             }
             return s;
         };
-        Call<ICiBaHttp.Translation> call = iCiBa.translateAPI(firstAlphabetToLower.apply(wordOrParagraph), "json", ICiBaHttp.KEY);
+        Call<ICiBaHttp.Translation> call = Request.iCiBaRequest().translateAPI(firstAlphabetToLower.apply(wordOrParagraph), "json", ICiBaHttp.KEY);
         call.enqueue(new Callback<ICiBaHttp.Translation>() {
             @Override
-            public void onResponse(Call<ICiBaHttp.Translation> call, Response<ICiBaHttp.Translation> response) {
+            public void onResponse(@Nonnull Call<ICiBaHttp.Translation> call, @Nonnull Response<ICiBaHttp.Translation> response) {
                 translation = response.body();
                 Logger.getLogger(ICiBaTranslator.class.getSimpleName()).info("translation get " + translation);
                 word.setText(wordOrParagraph);
@@ -73,7 +74,11 @@ public class ICiBaTranslator implements Translator {
                     return;
                 }
                 enSymbols.setText(left + nature.enSymbols + right);
+                englishVoice = new AudioClip(nature.enPronunciation);
+                enButton.setDisable(false);
                 amSymbols.setText(left + nature.amSymbols + right);
+                americanVoice = new AudioClip(nature.amPronunciation);
+                amButton.setDisable(false);
                 final Function<ICiBaHttp.Translation.Nature.Meaning[], String> transformMeaning = arr -> {
                     StringBuilder stringBuilder = new StringBuilder();
                     for (ICiBaHttp.Translation.Nature.Meaning meaning : arr) {
@@ -88,7 +93,7 @@ public class ICiBaTranslator implements Translator {
             }
 
             @Override
-            public void onFailure(Call<ICiBaHttp.Translation> call, Throwable throwable) {
+            public void onFailure(@Nonnull Call<ICiBaHttp.Translation> call, @Nonnull Throwable throwable) {
                 throwable.printStackTrace();
                 word.setText("error on http request");
                 meanings.setText("message:\n" + throwable.getMessage() + "\n for more details please check console");
@@ -102,11 +107,11 @@ public class ICiBaTranslator implements Translator {
     }
 
     public void readEnglish() {
-        Applet.newAudioClip(translation.nature[0].enPronunciation).play();
+        englishVoice.play();
     }
 
     public void readAmerican() {
-        Applet.newAudioClip(translation.nature[0].amPronunciation).play();
+        americanVoice.play();
     }
 
 }

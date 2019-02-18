@@ -2,6 +2,9 @@ package com.lfkj.util.system;
 
 import static org.jnativehook.keyboard.NativeKeyEvent.*;
 
+/**
+ * 将一堆键盘按键改成普通人看得懂的命名
+ */
 public enum Keys {
     ctrl(VC_CONTROL), alt(VC_ALT), shift(VC_SHIFT), win(VC_META),
     a(VC_A), b(VC_B), c(VC_C), d(VC_D), e(VC_E), f(VC_F), g(VC_G),

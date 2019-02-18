@@ -16,9 +16,7 @@ public interface BaiduHttp {
 
     String HOST_NAME = "http://api.fanyi.baidu.com/";
     long APPID = CONF.baiduAppId();
-//
     String PRIVATE_KEY = CONF.baiduPrivateKey();
-//        "";
 
     @GET("api/trans/vip/translate")
     Call<Translation> translateAPI(

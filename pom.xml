@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.lfkj</groupId>
     <artifactId>dt</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
     <dependencies>
         <dependency>
             <!-- used to listen mouse click event -->
@@ -12,6 +12,7 @@
             <version>2.1.0</version>
         </dependency>
         <dependency>
+            <!-- to send http request -->
             <groupId>com.squareup.retrofit2</groupId>
             <artifactId>retrofit</artifactId>
             <version>2.5.0</version>

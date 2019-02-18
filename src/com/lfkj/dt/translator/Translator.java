@@ -1,44 +1,16 @@
 package com.lfkj.dt.translator;
 
-import com.google.gson.*;
-import okhttp3.OkHttpClient;
-import retrofit2.converter.gson.GsonConverterFactory;
-
-import java.lang.reflect.Type;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.concurrent.TimeUnit;
-
-import static java.util.Objects.isNull;
-
+/**
+ * 由 {@link com.lfkj.dt.Dictionary} 持有；由 {@link com.lfkj.dt.translator} 包进行实现
+ * 负责与 FXML 进行交互，提供 {@link #translate(String)}方法调用
+ */
 public interface Translator {
 
     void translate(String wordOrParagraph);
 
+    /**
+     * 获取应用标题名称
+     */
     String getTittle();
-
-    OkHttpClient client = new OkHttpClient.Builder()
-            .connectTimeout(5, TimeUnit.SECONDS)
-            .readTimeout(5, TimeUnit.SECONDS)
-            .callTimeout(5, TimeUnit.SECONDS)
-            .build();
-
-    class IgnoreEmptyString2Url implements JsonDeserializer<URL> {
-        @Override
-        public URL deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-            String str = jsonElement.getAsString();
-            if (!isNull(str) && !str.isEmpty())
-                try {
-                    return new URL(str);
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }
-            return null;
-        }
-    }
-
-    Gson gson = new GsonBuilder().registerTypeAdapter(URL.class, new IgnoreEmptyString2Url()).create();
-
-    GsonConverterFactory factory = GsonConverterFactory.create(gson);
 
 }

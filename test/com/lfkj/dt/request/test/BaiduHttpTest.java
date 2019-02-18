@@ -1,16 +1,12 @@
 package com.lfkj.dt.request.test;
 
 import com.lfkj.dt.request.BaiduHttp;
-import com.lfkj.dt.translator.Translator;
-import okhttp3.OkHttpClient;
+import com.lfkj.dt.request.Request;
 import org.junit.Before;
 import org.junit.Test;
 import retrofit2.Call;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 public class BaiduHttpTest {
 
@@ -19,17 +15,7 @@ public class BaiduHttpTest {
     @Before
     public void init() {
 
-        OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(5, TimeUnit.SECONDS)
-                .readTimeout(5, TimeUnit.SECONDS)
-                .callTimeout(5, TimeUnit.SECONDS)
-                .build();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BaiduHttp.HOST_NAME)
-                .addConverterFactory(GsonConverterFactory.create(Translator.gson))
-                .client(client)
-                .build();
-        baidu = retrofit.create(BaiduHttp.class);
+        baidu = Request.baiduRequest();
     }
 
     @Test

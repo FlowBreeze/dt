@@ -5,7 +5,6 @@ import retrofit2.Call;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
-import java.net.URL;
 import java.util.Arrays;
 
 import static com.lfkj.dt.Constant.CONF;
@@ -42,10 +41,10 @@ public interface ICiBaHttp {
             String amSymbols;
             @SerializedName("ph_en_mp3")
             public
-            URL enPronunciation;
+            String enPronunciation;
             @SerializedName("ph_am_mp3")
             public
-            URL amPronunciation;
+            String amPronunciation;
             @SerializedName("parts")
             public
             Meaning[] meanings;

@@ -1,45 +1,37 @@
 package com.lfkj.dt.translator;
 
 import com.lfkj.dt.request.BaiduHttp;
+import com.lfkj.dt.request.Request;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
+import javax.annotation.Nonnull;
 import java.util.Objects;
 
+/**
+ * 通过 {@link retrofit2.Retrofit} 与百度翻译 API 交互，返回结果到 javafx 中
+ */
 public class BaiduTranslator implements Translator {
-
-    private BaiduHttp baidu;
 
     @FXML
     private TextArea meanings;
-
-    @FXML
-    public void initialize() {
-        baidu = new Retrofit.Builder()
-                .baseUrl(BaiduHttp.HOST_NAME)
-                .addConverterFactory(factory)
-                .client(client)
-                .build()
-                .create(BaiduHttp.class);
-    }
 
     @Override
     public void translate(String wordOrParagraph) {
         String q = wordOrParagraph.replaceAll("\\n", "");
         double rand = Math.random();
-        Call<BaiduHttp.Translation> call = baidu.translateAPI("en", "zh", q, rand, BaiduHttp.APPID, BaiduHttp.mkMd5(q, rand));
+        Call<BaiduHttp.Translation> call = Request.baiduRequest().translateAPI("en", "zh", q, rand, BaiduHttp.APPID, BaiduHttp.mkMd5(q, rand));
         call.enqueue(new Callback<BaiduHttp.Translation>() {
             @Override
-            public void onResponse(Call<BaiduHttp.Translation> call, Response<BaiduHttp.Translation> response) {
+            public void onResponse(@Nonnull Call<BaiduHttp.Translation> call, @Nonnull Response<BaiduHttp.Translation> response) {
                 meanings.setText(Objects.requireNonNull(response.body()).result[0].meanings);
             }
 
             @Override
-            public void onFailure(Call<BaiduHttp.Translation> call, Throwable throwable) {
+            public void onFailure(@Nonnull Call<BaiduHttp.Translation> call, @Nonnull Throwable throwable) {
                 meanings.setText("error on http request\nmessage:\n" + throwable.getMessage() + "\n for more details please check console");
             }
         });

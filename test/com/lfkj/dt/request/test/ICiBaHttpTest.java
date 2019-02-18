@@ -1,16 +1,12 @@
 package com.lfkj.dt.request.test;
 
 import com.lfkj.dt.request.ICiBaHttp;
-import com.lfkj.dt.translator.Translator;
-import okhttp3.OkHttpClient;
+import com.lfkj.dt.request.Request;
 import org.junit.Before;
 import org.junit.Test;
 import retrofit2.Call;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 public class ICiBaHttpTest {
 
@@ -18,17 +14,7 @@ public class ICiBaHttpTest {
 
     @Before
     public void init() {
-        OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(5, TimeUnit.SECONDS)
-                .readTimeout(5, TimeUnit.SECONDS)
-                .callTimeout(5, TimeUnit.SECONDS)
-                .build();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(ICiBaHttp.HOST_NAME)
-                .addConverterFactory(GsonConverterFactory.create(Translator.gson))
-                .client(client)
-                .build();
-        iCiBa = retrofit.create(ICiBaHttp.class);
+        iCiBa = Request.iCiBaRequest();
     }
 
     @Test
