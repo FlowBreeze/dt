@@ -3,31 +3,36 @@
 最近在 ubuntu 上读英语文档很不方便，每次碰到不认识的单词都要复制粘贴,  
 在 git 上找了一圈，发现没有 java 语言的划词应用，于是自己实现了一个  
 
-代码只有300多行，简单易懂，有需要可以自己改改，目前很多功能不是很完善
+代码不多，简单易懂，有需要可以自己改改，目前很多功能不是很完善
 
-## 目前版本 0.0.1
+## 目前版本 0.1.0
 >使用 JNativeHook 库监听鼠标点击事件  
 >使用 java.awt SystemSelection 获取选择文本  
 >使用 retrofit2 进行 http 通讯  
->使用 javafx 进行查词结果显示
+>使用 javafx 进行查词结果显示  
+>使用 owner 读取配置信息
+
+## 发布版 0.1.0
+点击[这里下载](https://github.com/FlowBreeze/dt/releases)  
+需要在 java 1.8 以上环境运行  
+> java -jar dt-0.1.0.jar
+如果出现 java.lang.NoClassDefFoundError: javafx/application/Application  
+请尝试安装 openjfx  
+>sudo apt install openjfx
 
 ## 不足
 >只支持英译汉  
->只支持爱词霸api  
 >界面样式不完善  
 >无法播放语音  
->只能在代码中启动，更改配置
 
 ## TODO
->加入百度翻译api，支持句子的翻译  
->添加配置文件，可以在应用上\.properties文件上配置信息  
 >添加界面样式，并支持自定义（使用 fxml）、更换主题  
->添加语音支持  
->支持热键翻译（目前只响应鼠标点击）
+>添加语音支持 
 
 >### 可能会做
 >>添加对windows操作系统支持  
 >>系统托盘图标
 
 ## 已知问题
->> 无法在更改 SystemSelection 响应事件的环境下使用 如：Intellij IDEA
+>> 在 SystemSelection 响应事件的环境下控制台会报错，但不影响使用 如：Intellij IDEA
+>> 启动后有几率无法使用，需要重新启动
