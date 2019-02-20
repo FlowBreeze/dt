@@ -1,4 +1,4 @@
-package com.lfkj.dt.translator;
+package com.lfkj.dt.view.translator;
 
 import com.lfkj.dt.request.BaiduHttp;
 import com.lfkj.dt.request.Request;

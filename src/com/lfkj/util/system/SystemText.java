@@ -1,5 +1,6 @@
 package com.lfkj.util.system;
 
+import javax.annotation.Nullable;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -39,12 +40,19 @@ public abstract class SystemText {
         });
     }
 
+    /**
+     * 获取上一次用户剪切、选中的文本的多态方法，
+     * 如果不是字符串则返回 null
+     */
+    @Nullable
     public String getStringFlavor() {
         try {
-            return (String) clipboard.getData(DataFlavor.stringFlavor);
+            if (clipboard.isDataFlavorAvailable(DataFlavor.stringFlavor))
+                return (String) clipboard.getData(DataFlavor.stringFlavor);
         } catch (UnsupportedFlavorException | IOException e) {
-            return null;
+            e.printStackTrace();
         }
+        return null;
     }
 
 }

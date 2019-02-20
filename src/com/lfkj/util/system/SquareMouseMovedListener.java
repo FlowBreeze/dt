@@ -45,7 +45,6 @@ public class SquareMouseMovedListener implements NativeMouseMotionListener, JNat
 
     public void setNewSquare(int startX, int startY, int endX, int endY) {
         this.rectangle = Shape.rectangle(startX, startY, endX, endY);
-        reset();
     }
 
 

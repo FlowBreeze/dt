@@ -9,8 +9,7 @@ public class SystemSelectionListenerTest {
     @Deprecated
     public void testSelectionListener() throws InterruptedException {
         SystemSelection systemSelectionListener = new SystemSelection();
-        systemSelectionListener.addSelectionListener(s -> {
-        });
+        systemSelectionListener.addSelectionListener(System.out::println);
         System.out.println(systemSelectionListener.getStringFlavor());
         Thread.sleep(100000000);
     }

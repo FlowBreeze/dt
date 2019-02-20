@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-
-<?import javafx.scene.control.TextArea?>
-<TextArea fx:id="meanings" prefHeight="175.0" prefWidth="324.0" wrapText="true" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.lfkj.dt.translator.BaiduTranslator" />

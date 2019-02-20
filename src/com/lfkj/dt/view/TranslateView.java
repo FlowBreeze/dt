@@ -1,5 +1,7 @@
-package com.lfkj.dt.translator;
+package com.lfkj.dt.view;
 
+import com.lfkj.dt.controller.Controller;
+import com.lfkj.dt.view.translator.Translator;
 import com.lfkj.util.fx.JfxUtil;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -7,38 +9,57 @@ import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.ToggleButton;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.logging.Logger;
 
+import static com.lfkj.dt.Configuration.HideStrategy.notHide;
+import static com.lfkj.dt.Constant.CONF;
 import static com.lfkj.dt.Constant.FXML_DIR;
 
 /**
  * 翻译器 {@link Translator} 的组合模式
  * <br/>
- * 通过 {@link #tab} 标签页进行组合
- * 每个 {@link Translator} 对应一个 {@link #tab}
+ * 通过 {@link #tabs} 标签页进行组合
+ * 每个 {@link Translator} 对应一个 {@link #tabs}
+ * 为 {@link com.lfkj.dt.Dictionary} 的默认加载类
+ * 具有关闭和固定的功能
  */
-public class TranslatorComposite implements Translator {
+public class TranslateView implements Translator {
     private final LinkedList<Translator> translators = new LinkedList<>();
     @FXML
-    private TabPane tab;
+    private TabPane tabs;
+    @FXML
+    private ToggleButton pinButton;
+    private Controller controller;
+
+
+    @FXML
+    public void initialize() {
+        if (CONF.hideStrategy() == notHide)
+            pinButton.setDisable(true);
+    }
 
     /**
-     * 使 {@link #tab} 可以响应拖拽让整个窗口移动
+     * 使 {@link #tabs} 可以响应拖拽让整个窗口移动
      *
      * @param stage 主窗口对象
      */
-    public void bindDruggedListener(Stage stage) {
-        JfxUtil.bindDruggedListener(tab, stage);
+    public void bindEvent(Controller controller, Stage stage) {
+        this.controller = controller;
+        bindDruggedListener(stage);
     }
 
+    private void bindDruggedListener(Stage stage) {
+        JfxUtil.bindDruggedListener(tabs, stage);
+    }
 
     /**
-     * 将所有 themes 加载进 {@link #tab}
-     * 同时把每个 {@link Translator} 中的 title 放入 {@link #tab} 上
+     * 将所有 themes 加载进 {@link #tabs}
+     * 同时把每个 {@link Translator} 中的 title 放入 {@link #tabs} 上
      *
      * @param themes 需要加载的 fxml 文件名称
      */
@@ -55,7 +76,7 @@ public class TranslatorComposite implements Translator {
                 this.translators.add(translator);
                 Tab tab = new Tab(translator.getTittle(), node);
                 tab.setText(translator.getTittle());
-                this.tab.getTabs().add(tab);
+                this.tabs.getTabs().add(tab);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -73,4 +94,22 @@ public class TranslatorComposite implements Translator {
     public String getTittle() {
         return "dictionary";
     }
+
+    @FXML
+    public void close() {
+        controller.onClose();
+    }
+
+    @FXML
+    public void pin() {
+        if (pinButton.isSelected()) {
+            pinButton.setText("◈");
+            controller.onPin(true);
+        } else {
+            pinButton.setText("◇");
+            controller.onPin(false);
+        }
+    }
+
+
 }

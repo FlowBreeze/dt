@@ -1,4 +1,4 @@
-package com.lfkj.dt.translator;
+package com.lfkj.dt.view.translator;
 
 import com.lfkj.dt.request.ICiBaHttp;
 import com.lfkj.dt.request.Request;
@@ -74,11 +74,17 @@ public class ICiBaTranslator implements Translator {
                     return;
                 }
                 enSymbols.setText(left + nature.enSymbols + right);
-                englishVoice = new AudioClip(nature.enPronunciation);
-                enButton.setDisable(false);
+                boolean enIsDisable = isNull(nature.enPronunciation) || nature.enPronunciation.isEmpty();
+                if (!enIsDisable) {
+                    englishVoice = new AudioClip(nature.enPronunciation);
+                }
+                enButton.setDisable(enIsDisable);
                 amSymbols.setText(left + nature.amSymbols + right);
-                americanVoice = new AudioClip(nature.amPronunciation);
-                amButton.setDisable(false);
+                boolean amIsDisable = isNull(nature.amPronunciation) || nature.amPronunciation.isEmpty();
+                if (!amIsDisable) {
+                    americanVoice = new AudioClip(nature.amPronunciation);
+                }
+                amButton.setDisable(amIsDisable);
                 final Function<ICiBaHttp.Translation.Nature.Meaning[], String> transformMeaning = arr -> {
                     StringBuilder stringBuilder = new StringBuilder();
                     for (ICiBaHttp.Translation.Nature.Meaning meaning : arr) {

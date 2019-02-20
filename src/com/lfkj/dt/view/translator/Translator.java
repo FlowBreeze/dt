@@ -1,7 +1,7 @@
-package com.lfkj.dt.translator;
+package com.lfkj.dt.view.translator;
 
 /**
- * 由 {@link com.lfkj.dt.Dictionary} 持有；由 {@link com.lfkj.dt.translator} 包进行实现
+ * 由 {@link com.lfkj.dt.Dictionary} 持有；由 {@link com.lfkj.dt.view.translator} 包进行实现
  * 负责与 FXML 进行交互，提供 {@link #translate(String)}方法调用
  */
 public interface Translator {
