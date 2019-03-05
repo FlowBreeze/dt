@@ -9,7 +9,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import javax.annotation.Nonnull;
-import java.util.Objects;
+
+import static com.lfkj.util.Context.nullOrThen;
+import static java.util.Objects.nonNull;
 
 /**
  * 通过 {@link retrofit2.Retrofit} 与百度翻译 API 交互，返回结果到 javafx 中
@@ -27,12 +29,13 @@ public class BaiduTranslator implements Translator {
         call.enqueue(new Callback<BaiduHttp.Translation>() {
             @Override
             public void onResponse(@Nonnull Call<BaiduHttp.Translation> call, @Nonnull Response<BaiduHttp.Translation> response) {
-                meanings.setText(Objects.requireNonNull(response.body()).result[0].meanings);
+                BaiduHttp.Translation.Result[] results = nullOrThen(response.body(), b -> b.result);
+                meanings.setText(nonNull(results) && results.length > 0 ? results[0].meanings : "未收到翻译");
             }
 
             @Override
             public void onFailure(@Nonnull Call<BaiduHttp.Translation> call, @Nonnull Throwable throwable) {
-                meanings.setText("error on http request\nmessage:\n" + throwable.getMessage() + "\n for more details please check console");
+                meanings.setText("请求失败 原因：" + throwable.getCause());
             }
         });
     }

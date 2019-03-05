@@ -9,6 +9,7 @@ import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.stage.Stage;
 
@@ -17,8 +18,7 @@ import java.util.LinkedList;
 import java.util.logging.Logger;
 
 import static com.lfkj.dt.Configuration.HideStrategy.notHide;
-import static com.lfkj.dt.Constant.CONF;
-import static com.lfkj.dt.Constant.FXML_DIR;
+import static com.lfkj.dt.Constant.*;
 
 /**
  * 翻译器 {@link Translator} 的组合模式
@@ -34,6 +34,9 @@ public class TranslateView implements Translator {
     private TabPane tabs;
     @FXML
     private ToggleButton pinButton;
+    @FXML
+    private TextField searchArea;
+
     private Controller controller;
 
 
@@ -97,17 +100,28 @@ public class TranslateView implements Translator {
 
     @FXML
     public void close() {
-        controller.onClose();
+        controller.onCloseButtonClick();
     }
 
     @FXML
     public void pin() {
         if (pinButton.isSelected()) {
-            pinButton.setText("◈");
-            controller.onPin(true);
+            pinButton.setText(PIN);
+            controller.onPinButtonClick(true);
         } else {
-            pinButton.setText("◇");
-            controller.onPin(false);
+            pinButton.setText(UNPIN);
+            controller.onPinButtonClick(false);
+        }
+    }
+
+    @FXML
+    public void search() {
+        if (searchArea.isVisible()) {
+            controller.onSearchButtonClick(searchArea::getText);
+            searchArea.setVisible(false);
+        } else {
+            searchArea.setVisible(true);
+            searchArea.requestFocus();
         }
     }
 

@@ -1,14 +1,16 @@
 package com.lfkj.util.system;
 
-import javax.annotation.Nullable;
 import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
+import java.util.Optional;
 import java.util.function.Consumer;
 
+import static com.lfkj.util.Context.cast;
+import static java.awt.datatransfer.DataFlavor.stringFlavor;
+
 /**
- * 对 {@link javafx.scene.input.Clipboard} 进行封装后的对象，
+ * 对 {@link java.awt.datatransfer.Clipboard} 进行封装后的对象，
  * 其内部是 操作系统剪切板对象 （通过 <code>new {@link SystemClipboard}</code> 创建）
  * 或者是 操作系统用户框选的文本监控对象 （通过 <code>new {@link SystemSelection}</code> 创建）
  * <br/>
@@ -32,7 +34,7 @@ public abstract class SystemText {
         clipboard.addFlavorListener(e -> {
             String data = null;
             try {
-                data = (String) clipboard.getData(DataFlavor.stringFlavor);
+                data = (String) clipboard.getData(stringFlavor);
             } catch (UnsupportedFlavorException | IOException e1) {
                 e1.printStackTrace();
             }
@@ -42,17 +44,17 @@ public abstract class SystemText {
 
     /**
      * 获取上一次用户剪切、选中的文本的多态方法，
-     * 如果不是字符串则返回 null
+     *
+     * @return {@link Optional#empty()} 如果上一次选择的不是文本；
+     * {@link Optional<String>} 其他情况
      */
-    @Nullable
-    public String getStringFlavor() {
+    public Optional<String> getStringFlavor() {
         try {
-            if (clipboard.isDataFlavorAvailable(DataFlavor.stringFlavor))
-                return (String) clipboard.getData(DataFlavor.stringFlavor);
-        } catch (UnsupportedFlavorException | IOException e) {
-            e.printStackTrace();
+            if (clipboard.isDataFlavorAvailable(stringFlavor))
+                return Optional.of(cast(clipboard.getData(stringFlavor)));
+        } catch (UnsupportedFlavorException | IOException ignored) {
         }
-        return null;
+        return Optional.empty();
     }
 
 }
