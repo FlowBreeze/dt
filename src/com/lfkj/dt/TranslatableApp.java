@@ -49,4 +49,12 @@ public interface TranslatableApp {
      * 返回当前界面是否未被隐藏
      */
     boolean isShowing();
+
+    /**
+     * 切换目前事件监听状态 true 开启监听 false 禁止监听
+     *
+     * @param isEnable 监听状态
+     */
+    void enableEventListener(boolean isEnable);
+
 }

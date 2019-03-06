@@ -11,43 +11,60 @@ import java.util.function.Supplier;
 import static com.lfkj.util.cast.LfkjCommonCast.pairOf;
 
 /**
- * 通过加载 {@link Configuration} 和 {@link Controller} 两个对象
- * 将 {@link Controller} 与底层鼠标、键盘监听进行对接
+ * 与底层 {{@link org.jnativehook}} 交互，负责监听事件的注册与销毁
+ * 将事件的处理交给 @{@link Controller}
+ * 需要通过 {@link Configuration} 和 {@link Controller} 两个对象进行构建
  */
 class NativeEventBuilder {
 
     private final Configuration conf;
     private final MouseListenerFacade mouseListener;
-    private final Controller controller;
     private final HashSet<KeyListenerFacade> keyListenerFacadeSet = new HashSet<>();
+    /**
+     * 用于控制其他监听是否启动的源监听器
+     */
+    private final KeyListenerFacade metaKeyListener;
+    private final Controller controller;
+    private boolean enable = true;
 
-    NativeEventBuilder(Configuration conf, Controller controller) {
+    NativeEventBuilder(Configuration conf, Controller controller) throws NativeHookException {
         this.conf = conf;
         this.controller = controller;
         this.mouseListener = new MouseListenerFacade();
+        this.metaKeyListener = new KeyListenerFacade(conf.enableKey());
+        metaKeyListener.onAllKeyPressed(() -> controller.onEnableKeyPressed(enable = !enable)); // enable 取反
+        metaKeyListener.addToGlobalScreen();
     }
 
     /**
-     * 通过 #conf 查询需要初始化的底层监听
+     * 通过 {@link #conf} 查询需要初始化的底层监听
      * 按需构建鼠标监听、键盘监听
      */
-    void addEvent() throws NativeHookException {
+    void addEvent() {
         SystemSelection systemSelection = new SystemSelection();
-        initMouseListener(systemSelection::getStringFlavor);
-        if (conf.useSelection() && conf.selectionTiggerByKey()) {
-            addDisplayKeyListener(systemSelection::getStringFlavor, conf.selectionTiggerKey());
-        }
-        if (conf.useClipBoard()) {
-            addDisplayKeyListener(new SystemClipboard()::getStringFlavor, conf.selectionTiggerKey());
+        try {
+            initMouseListener(() -> systemSelection.getStringFlavor().orElse(null));
+            if (conf.useSelection() && conf.selectionTiggerByKey()) {
+                addDisplayKeyListener(() -> systemSelection.getStringFlavor().orElse(null), conf.selectionTiggerKey());
+            }
+            if (conf.useClipBoard()) {
+                addDisplayKeyListener(() -> new SystemClipboard().getStringFlavor().orElse(null), conf.selectionTiggerKey());
+            }
+        } catch (NativeHookException e) {
+            e.printStackTrace();
         }
     }
 
     /**
      * 删除所有监听
+     *
+     * @param removeMetaEvent 是否删除源监听 {@link #metaKeyListener} 删除后将不能通过键盘监听启用其他监听
      */
-    void removeAll() {
+    void removeEvent(boolean removeMetaEvent) {
         keyListenerFacadeSet.forEach(JNativeHookFacade::removeFromGlobalScreen);
         mouseListener.removeFromGlobalScreen();
+        if (removeMetaEvent)
+            metaKeyListener.removeFromGlobalScreen();
     }
 
     /**
@@ -76,5 +93,6 @@ class NativeEventBuilder {
         keyListener.onAllKeyPressed(() -> controller.onDisplayKeyPressed(textSupplier));
         keyListener.addToGlobalScreen();
     }
+
 
 }

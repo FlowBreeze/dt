@@ -16,6 +16,12 @@ import static com.lfkj.util.cast.LfkjCommonCast.pairOf;
 
 @Config.Sources("file:" + CONFIG_FILE_NAME)
 public interface Configuration extends Mutable, Accessible {
+    String enableKey = "enableKey";
+
+    @Separator("\\+")
+    @DefaultValue("ctrl + alt + d")
+    Keys[] enableKey();
+
     String useSelection = "useSelection";
 
     @DefaultValue("true")
@@ -121,13 +127,15 @@ public interface Configuration extends Mutable, Accessible {
         out.write("# 版本 " + VERSION + "\n");
         out.write("# 以下是用户配置信息，通过这些配置可以简易的更改 dt 的运行逻辑\n");
         out.write("\n# < 数据源和触发 >\n");
+        out.write("# enableKey: 启动/禁止监听响应的快捷键\n");
         out.write("# 当 useSelection 为 true 时,可通过 selectionTiggerByMouse 和 selectionTiggerByKey 和其中的子选项设置翻译程序的触发\n");
         out.write("# selectionTiggerByMouse 通过鼠标触发， selectionTiggerByKey 通过快捷键触发");
         out.write("# doubleClickInterval 设置双击间隔，当用户双击间隔小于设置时间时触发翻译 单位：ms（可能有100ms的误差）\n");
         out.write("# drugSelectInterval 设置拖拽间隔，当用户鼠标按下--抬起的间隔大于设置时间时触发翻译 单位:ms（可能有100ms的误差）\n");
         out.write("# 鼠标监听不会响应和上一次一样的翻译事件，避免双击打开应用也会弹出界面\n");
         out.write("# selectionTiggerKey clipboardTiggerKey 可以设置快捷键翻译，可以使用的按键有 [0-9a-zA-Z] 和 ctrl alt shift win\n");
-        write.reAccept(pairOf(useSelection, getProperty(useSelection)))
+        write.reAccept(pairOf(enableKey, getProperty(enableKey)))
+                .reAccept(pairOf(useSelection, getProperty(useSelection)))
                 .reAccept(pairOf(selectionTiggerByMouse, getProperty(selectionTiggerByMouse)))
                 .reAccept(pairOf(doubleClickInterval, getProperty(doubleClickInterval)))
                 .reAccept(pairOf(drugSelectInterval, getProperty(drugSelectInterval)))

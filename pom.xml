@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.lfkj</groupId>
     <artifactId>dt</artifactId>
-    <version>0.2.1</version>
+    <version>0.2.2</version>
     <dependencies>
         <dependency>
             <!-- used to listen mouse click event -->

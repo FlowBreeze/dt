@@ -81,6 +81,11 @@ public class EventController implements Controller {
         nullOrThen(squareMouseMovedListener, SquareMouseMovedListener::removeFromGlobalScreen);
     }
 
+    /**
+     * 当按下时记录当前时间，用以在鼠标抬起时判断
+     *
+     * @param position 鼠标按下的位置
+     */
     @Override
     public void onMousePressed(Pair<Integer, Integer> position) {
         if (nonNull(clickTimeChecker)) {
@@ -88,9 +93,13 @@ public class EventController implements Controller {
         }
     }
 
+
     /**
      * 根据 {@link #conf} 构建所有鼠标抬起事件
      * 运用其他内部方法抽象调用过程
+     *
+     * @param position     鼠标抬起的位置
+     * @param textSupplier 获取需要搜索文本的方法
      */
     @Override
     public void onMouseReleased(Pair<Integer, Integer> position, Supplier<String> textSupplier) {
@@ -115,6 +124,36 @@ public class EventController implements Controller {
 
     @Override
     public void onDisplayKeyPressed(Supplier<String> textSupplier) {
+        showOrHideView(textSupplier);
+    }
+
+    @Override
+    public void onEnableKeyPressed(boolean isEnable) {
+        translatableApp.enableEventListener(isEnable);
+    }
+
+    /**
+     * {@link #isPin}对象会影响界面的显示和隐藏行为
+     *
+     * @param isPin 当前界面是否固定
+     */
+    @Override
+    public void onPinButtonClick(boolean isPin) {
+        this.isPin = isPin;
+    }
+
+    @Override
+    public void onSearchButtonClick(Supplier<String> textSupplier) {
+        translatableApp.displayTranslateView(null, null, textSupplier.get());
+    }
+
+    @Override
+    public void onCloseButtonClick() {
+        hideView();
+    }
+
+
+    private void showOrHideView(Supplier<String> textSupplier) {
         if (translatableApp.isShowing())
             translatableApp.hide();
         else {
@@ -123,13 +162,7 @@ public class EventController implements Controller {
         }
     }
 
-    @Override
-    public void onPin(boolean isPin) {
-        this.isPin = isPin;
-    }
-
-    @Override
-    public void onClose() {
+    private void hideView() {
         translatableApp.hide();
     }
 
@@ -137,7 +170,7 @@ public class EventController implements Controller {
      * 根据配置文件解析显示位置
      * 为 {@link Configuration.ShowPosition#nearMouse} 时，接触到屏幕边缘会反弹
      */
-    private void displayTranslateView(int x, int y, String search) {
+    private void displayTranslateView(int x, int y, @Nullable String search) {
         if (isPin)
             translatableApp.displayTranslateView(null, null, search);
         else
@@ -179,6 +212,8 @@ public class EventController implements Controller {
 
         private boolean check() {
             final LocalTime thisReleased = LocalTime.now();
+            if (isNull(thisPressed)) // 当双击时 release 事件会在 click 事件后处理
+                return false;
             return Duration.between(thisPressed, thisReleased).toMillis() > drugSelectInterval
                     || isNull(lastPressed)
                     || Duration.between(lastPressed, thisReleased).toMillis() < doubleClickInterval;

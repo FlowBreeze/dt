@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.lfkj.dt.view.TranslateView">
     <TabPane fx:id="tabs" minHeight="20.0" minWidth="100.0" tabClosingPolicy="UNAVAILABLE"/>
     <ToggleButton fx:id="pinButton" maxHeight="32.0" maxWidth="32.0" minHeight="32.0" minWidth="32.0"
-                  mnemonicParsing="false" onAction="#pin" text="◇" AnchorPane.rightAnchor="40.0"
+                  mnemonicParsing="false" onAction="#pin" text="◇" AnchorPane.rightAnchor="34.0"
                   AnchorPane.topAnchor="0.0"/>
     <Button layoutX="10.0" layoutY="10.0" maxHeight="32.0" maxWidth="32.0" minHeight="32.0" minWidth="32.0"
-            mnemonicParsing="false" onAction="#close" text="✕" AnchorPane.rightAnchor="0.0"
+            mnemonicParsing="false" onAction="#close" text="✕" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+    <TextField fx:id="searchArea" minHeight="32.0" onAction="#search" visible="false" AnchorPane.leftAnchor="0.0"
+               AnchorPane.rightAnchor="102.0" AnchorPane.topAnchor="0.0"/>
+    <Button layoutX="112.0" layoutY="4.0" maxHeight="32.0" maxWidth="32.0" minHeight="32.0" minWidth="32.0"
+            mnemonicParsing="false" onAction="#search" text="✍" AnchorPane.rightAnchor="68.0"
             AnchorPane.topAnchor="0.0"/>
 </AnchorPane>

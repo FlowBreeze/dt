@@ -41,19 +41,33 @@ public interface Controller {
     /**
      * 当展示界面的快捷键按下时触发
      *
-     * @param textSupplier 获取需要搜索文本的方法
+     * @param textSupplier 获取需要搜索文本的方法,其返回值可以为 null，为 null 时不进行查询
      */
     void onDisplayKeyPressed(Supplier<String> textSupplier);
+
+    /**
+     * 当禁止监听、启动监听的快捷键按下时触发
+     *
+     * @param isEnable 当前用户期望监听是禁止的还是启用的
+     */
+    void onEnableKeyPressed(boolean isEnable);
 
     /**
      * 当界面被固定、解除固定模式时触发
      *
      * @param isPin 当前界面是否固定
      */
-    void onPin(boolean isPin);
+    void onPinButtonClick(boolean isPin);
+
+    /**
+     * 当用户进行搜索时触发
+     *
+     * @param textSupplier 进行搜索的文本的获取函数
+     */
+    void onSearchButtonClick(Supplier<String> textSupplier);
 
     /**
      * 当界面关闭时触发
      */
-    void onClose();
+    void onCloseButtonClick();
 }

@@ -101,7 +101,7 @@ public class Dictionary extends Application implements TranslatableApp {
 
     @Override
     public void stop() {
-        nativeEventBuilder.removeAll();
+        nativeEventBuilder.removeEvent(true);
         controller.unInit();
     }
 
@@ -120,7 +120,7 @@ public class Dictionary extends Application implements TranslatableApp {
                 if (height + leftTop._2 + cushionLength < screenBounds.getMaxY()) {
                     stage.setY(leftTop._2 + offsetY);
                 } else
-                    stage.setY(leftTop._2 - offsetY - width);
+                    stage.setY(leftTop._2 - offsetY - height);
             }
             stage.show();
         });
@@ -145,6 +145,14 @@ public class Dictionary extends Application implements TranslatableApp {
     @Override
     public boolean isShowing() {
         return stage.isShowing();
+    }
+
+    @Override
+    public void enableEventListener(boolean isEnable) {
+        if (isEnable)
+            nativeEventBuilder.addEvent();
+        else
+            nativeEventBuilder.removeEvent(false);
     }
 
 }
